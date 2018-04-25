@@ -3,10 +3,11 @@ const selectBreed = document.querySelector('#selectBreed');
 const view = document.querySelector('#viewDog');
 const breed = document.querySelector('#breedImage')
 let dogList = [];
-let count = 0;
+
 let dog1 = "";
 breed.style.visibility = 'hidden';
 function getDog(){
+  let count = 0;
   $.ajax({
     url: dog_api,
     dataType: 'json',
@@ -36,14 +37,22 @@ function getDog(){
   })
 }
 
+//could have used the random image API https://dog.ceo/api/breeds/image/random
+//instead of pulling all of the images for a certain breed and then randomly selecting one
 function getImage(dogImage){
+  let count = 0;
   $.ajax({
     url: "https://dog.ceo/api/breed/" + `${dogImage}` + "/images",
     dataType: 'json',
     success: (data)=>{
+      
+      count = Object.keys(data.message).length;
+      
       let y = Math.random(0,count) * count;
-      // console.log(y)
-      let dogUrl = data.message[1];
+      console.log("Y is " + y)
+      y =  Math.floor(y);
+      
+      let dogUrl = data.message[y];
       console.log("URL " + dogUrl)
       breed.src = dogUrl;
       breed.style.visibility = "visible";
